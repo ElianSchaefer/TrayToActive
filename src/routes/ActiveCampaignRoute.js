@@ -1,7 +1,11 @@
+const express = require('express');
+const router = express.Router();
 const activeCampaignController = require("../controller/AvtiveCampaignController");
 
-async function ActiveCampaignRoutes(server){
-    server.post("/teste", activeCampaignController.teste)
-}
 
-module.exports = ActiveCampaignRoutes;
+
+router.post("/create", activeCampaignController.createAccount)
+
+
+
+module.exports = router;

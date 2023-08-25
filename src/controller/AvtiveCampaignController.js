@@ -1,19 +1,18 @@
-async function teste(request, reply){
-    const{
-        email,
-        fristName,
-        lastName,
-    }= request.body
+const { request } = require('http');
+const ACService = require('../services/ActiveCampaignService');
 
-    try{
+exports.createAccount = (req, res) => {
+    try {
+        const { nome, accountUrl } = req.body;
 
-        return reply.code(200).send();
+        // res.send(ACService.CreateAccount(nome, accountUrl));
+        ACService.CreateAccount(nome, accountUrl);
+
+        console.log("retorno - " + res.body)
+        return res.status(res.statusCode).json({ message: "Conta Criada " + res.body });
     }
-    catch{
-        return reply.code(500).send("Internal Server Error");
+    catch (error) {
+        return res.status(res.statusCode).send({ message: "Internal Server Error - " + error.message });
     }
 }
 
-module.exports = {
-    teste,
-}

@@ -10,8 +10,8 @@ const options = {
     headers:{'Api-Token': '05688b886205fe84e315d0bb890e74b849410a7c435ee546145eca151f6e32a127bb3030'}
     
 };
-console.log(JSON.stringify(options))
-request.post(options, (err, res, body) => {
+//console.log(JSON.stringify(options))
+request.post(options, (err, res) => {
     if (err) {
         return console.log(err);
     }
@@ -19,4 +19,4 @@ request.post(options, (err, res, body) => {
     console.log(res.body);
 });
 }
-module.exports ={CreateAccount, TesteSistema}
+module.exports ={CreateAccount}
