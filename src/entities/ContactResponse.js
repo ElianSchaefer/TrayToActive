@@ -1,14 +1,10 @@
 class ContactsResponse {
-    constructor(email, phone, firstName, lastName, createdTimestamp, updatedTimestamp, id) {
-        this.contact = {
-            email:email,
-            phone:phone,
-            firstName: firstName,
-            lastName: lastName,
-            createdTimestamp: createdTimestamp,
-            updatedTimestamp: updatedTimestamp,
-            id: id
-        };
+    constructor(contact) {
+            this.email = contact.email,
+            this.phone = contact.phone,
+            this.firstName = contact.firstName,
+            this.lastName = contact.lastName,
+            this.id = contact.id
     }
 
     // addField(customFieldId, fieldValue, accountId, fieldCurrency) {
@@ -27,19 +23,6 @@ class ContactsResponse {
 
 }
 
-class ContactsResponseError{
-    constructor(title, detail, code, pointer) {
-        this.errors = [
-            {
-                title: title,
-                detail: detail,
-                code: code,
-                source: {
-                    pointer: pointer
-                }
-            }
-        ];
-    }
-}
 
-module.exports = ContactsResponse, ContactsResponseError
+
+module.exports = ContactsResponse

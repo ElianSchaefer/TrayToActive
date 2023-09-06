@@ -10,6 +10,8 @@ router.get('/', function (req, res) {
 
 router.post("/Accounts", accountsController.createAccount);
 router.post("/Contacts", contactsController.createContact);
+router.get("/GetContacts", contactsController.getContactByEmail);
+router.put("/UpdateContacts", contactsController.updateContact);
 router.post("/ContactsTag", tagController.createContact);
 
 

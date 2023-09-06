@@ -1,8 +1,10 @@
-const { ContactResponse, ContactResponseError } = require('../entities/ContactResponse');
+const ContactsResponseError = require('../entities/ContactResponseError');
+const ContactsResponse = require('../entities/ContactResponse');
 const Contact = require('../entities/Contact');
 const Object = require('../entities/Object');
 const request = require('request');
 const { response } = require('express');
+const Contacts = require('../entities/ContactResponse');
 
 
 //colocar nas configs? .env
@@ -16,20 +18,56 @@ async function makeRequestAsync(options, data) {
             if (err) {
                 console.log('erro 01', url)
                 return reject(err);
-            } else{
+            } else {
                 const response = {
-                    statusCode : res.statusCode,
-                    statusMessage : res.statusMessage,
-                    body : body
+                    statusCode: res.statusCode,
+                    statusMessage: res.statusMessage,
+                    body: body
                 }
+                console.log(`Status: ${res.statusCode} - ${res.statusMessage}`);
+                resolve(response);
             }
-            console.log(`Status: ${res.statusCode} - ${res.statusMessage}`);
-            resolve(response);
         });
     });
 }
+async function makeRequestAsyncGet(options, data) {
 
+    return new Promise((resolve, reject) => {
+        request.get(options, (err, res, body) => {
+            if (err) {
+                console.log('erro 01', url)
+                return reject(err);
+            } else {
+                const response = {
+                    statusCode: res.statusCode,
+                    statusMessage: res.statusMessage,
+                    body: body
+                }
+                console.log(`Status: ${res.statusCode} - ${res.statusMessage}`);
+                resolve(response);
+            }
+        });
+    });
+}
+async function makeRequestAsyncPut(options, data) {
 
+    return new Promise((resolve, reject) => {
+        request.put(options, (err, res, body) => {
+            if (err) {
+                console.log('erro 01', url)
+                return reject(err);
+            } else {
+                const response = {
+                    statusCode: res.statusCode,
+                    statusMessage: res.statusMessage,
+                    body: body
+                }
+                console.log(`Status: ${res.statusCode} - ${res.statusMessage}`);
+                resolve(response);
+            }
+        });
+    });
+}
 
 const CreateContact = async (contact) => {
 
@@ -46,15 +84,13 @@ const CreateContact = async (contact) => {
         const response = await makeRequestAsync(options);
 
 
-        console.log("ret", response)
+        console.log("ret - ", response)
         if (response.statusCode === 422) {
-            const result = new ContactResponseError(response);
-            console.log('Contato já existe: ', result);
-            return result;
+            return response;
         }
         else {
-            const result = new ContactResponse(response);
-            console.log('Contato Criado: ', result);
+            const { contact } = response.body
+            const result = new ContactsResponse(contact);
             return result;
         }
     }
@@ -63,4 +99,73 @@ const CreateContact = async (contact) => {
     }
 
 }
-module.exports = { CreateContact };
+
+const getContactByEmail = async (emailContact) => {
+    console.log('email - ', emailContact)
+    const options = {
+        url: `${BASE_URL}/contacts?filters[email]=${emailContact}`,
+        json: true,
+        headers: COMMON_HEADERS
+    };
+
+
+    try {
+        // response esta chegando  como undefined
+        //console.log('opt: ', options)
+        const response = await makeRequestAsyncGet(options);
+
+        //console.log("ret get- ", response)
+        if (response.statusCode === 422) {
+            return response;
+        }
+        else if (response.statusCode === 200) {
+            const { contacts } = response.body
+            if (contacts.length === 0) {
+                return "Contato não encontrado!";
+            }
+            const result = new ContactsResponse(contacts[0]);
+            return result;
+        }
+        else {
+            throw new Error('erro');
+        }
+    }
+    catch (error) {
+        console.error('Erro ao encontrar contato: ', error);
+    }
+}
+
+const updateContact = async (contact) => {
+
+    const id = (await getContactByEmail(contact.email)).id;
+    if (id === undefined) {
+        return "Conta não encontrada";
+    }
+
+    const options = {
+        url: `${BASE_URL}/contacts/${id}`,
+        json: true,
+        body: new Object(contact),
+        headers: COMMON_HEADERS
+    };
+
+    try {
+        // response esta chegando  como undefined
+        const response = await makeRequestAsyncPut(options);
+
+        console.log("ret up - ", response)
+        if (response.statusCode === 422) {
+            return response;
+        }
+        else {
+            const { contact } = response.body
+            const result = new ContactsResponse(contact);
+            return result;
+        }
+    }
+    catch (error) {
+        console.error('Erro ao atualizar contato: ', error);
+    }
+
+}
+module.exports = { CreateContact, getContactByEmail, updateContact };
