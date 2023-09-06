@@ -2,6 +2,7 @@ const { ContactResponse, ContactResponseError } = require('../entities/ContactRe
 const Contact = require('../entities/Contact');
 const Object = require('../entities/Object');
 const request = require('request');
+const { response } = require('express');
 
 
 //colocar nas configs? .env
@@ -15,14 +16,15 @@ async function makeRequestAsync(options, data) {
             if (err) {
                 console.log('erro 01', url)
                 return reject(err);
+            } else{
+                const response = {
+                    statusCode : res.statusCode,
+                    statusMessage : res.statusMessage,
+                    body : body
+                }
             }
-            resolve(JSON.stringify(body));
             console.log(`Status: ${res.statusCode} - ${res.statusMessage}`);
-            //console.log('das',JSON.stringify(res.body));
-            //até aqui OK!!
-            //console.log('resposta: ', res);
-            //console.log('body: ', body);
-            return resolve;
+            resolve(response);
         });
     });
 }
@@ -41,10 +43,10 @@ const CreateContact = async (contact) => {
 
     try {
         // response esta chegando  como undefined
-        //console.log(`Body:$ ${JSON.stringify(contact)}`)
         const response = await makeRequestAsync(options);
-        console.log(response.statusCode)
-        //console.log('response - ',response, '..')
+
+
+        console.log("ret", response)
         if (response.statusCode === 422) {
             const result = new ContactResponseError(response);
             console.log('Contato já existe: ', result);
