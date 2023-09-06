@@ -1,12 +1,12 @@
 class ContactsResponse {
-    constructor(name, accountUrl, createdTimestamp, updatedTimestamp, id) {
-        this.account = {
-            name: name,
-            accountUrl: accountUrl,
+    constructor(email, phone, firstName, lastName, createdTimestamp, updatedTimestamp, id) {
+        this.contact = {
+            email:email,
+            phone:phone,
+            firstName: firstName,
+            lastName: lastName,
             createdTimestamp: createdTimestamp,
             updatedTimestamp: updatedTimestamp,
-            //links: [],
-            //fields: [],
             id: id
         };
     }

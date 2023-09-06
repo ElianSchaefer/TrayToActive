@@ -1,6 +1,6 @@
 class Object{
-    constructor(account){
-        this.account = account;
+    constructor(contact){
+        this.contact = contact;
     }
 }
 module.exports = Object

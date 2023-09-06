@@ -20,6 +20,9 @@ async function makeRequestAsync(options, data) {
             console.log(`Status: ${res.statusCode} - ${res.statusMessage}`);
             //console.log('das',JSON.stringify(res.body));
             //até aqui OK!!
+            //console.log('resposta: ', res);
+            //console.log('body: ', body);
+            return resolve;
         });
     });
 }
@@ -31,7 +34,7 @@ const CreateContact = async (contact) => {
     const options = {
         url: `${BASE_URL}/contacts`,
         json: true,
-        body: new Object(new Contact(contact)),
+        body: new Object(contact),
         headers: COMMON_HEADERS
     };
 
@@ -40,7 +43,7 @@ const CreateContact = async (contact) => {
         // response esta chegando  como undefined
         //console.log(`Body:$ ${JSON.stringify(contact)}`)
         const response = await makeRequestAsync(options);
-
+        console.log(response.statusCode)
         //console.log('response - ',response, '..')
         if (response.statusCode === 422) {
             const result = new ContactResponseError(response);
