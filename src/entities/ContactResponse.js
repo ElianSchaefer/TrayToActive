@@ -6,7 +6,7 @@ class ContactsResponse {
             this.lastName = contact.lastName,
             this.idContato = contact.id
             this.idTag = contact.contactTags.tag || '',
-            this.idContactTags = contact.contactTags.id||'' 
+            this.idContactTags = contact.contactTags ||'' 
     }
 }
 
