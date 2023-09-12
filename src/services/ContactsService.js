@@ -30,6 +30,7 @@ async function makeRequestAsync(options, data) {
         });
     });
 }
+
 async function makeRequestAsyncGet(options, data) {
 
     return new Promise((resolve, reject) => {
@@ -49,6 +50,7 @@ async function makeRequestAsyncGet(options, data) {
         });
     });
 }
+
 async function makeRequestAsyncPut(options, data) {
 
     return new Promise((resolve, reject) => {
@@ -80,9 +82,7 @@ const CreateContact = async (contact) => {
 
 
     try {
-        // response esta chegando  como undefined
         const response = await makeRequestAsync(options);
-
 
         console.log("ret - ", response)
         if (response.statusCode === 422) {
@@ -103,18 +103,16 @@ const CreateContact = async (contact) => {
 const getContactByEmail = async (emailContact) => {
     console.log('email - ', emailContact)
     const options = {
-        url: `${BASE_URL}/contacts?filters[email]=${emailContact}`,
+        url: `${BASE_URL}/contacts?filters[email]=${emailContact}&include=contactTags.tag`,
         json: true,
         headers: COMMON_HEADERS
     };
 
-
+    console.log(options.url)
+    //precisa retornar as informações das tags this.tag = contact.contactTags.tag, this.contactTags = contact.contactTags.id 
     try {
-        // response esta chegando  como undefined
-        //console.log('opt: ', options)
         const response = await makeRequestAsyncGet(options);
 
-        //console.log("ret get- ", response)
         if (response.statusCode === 422) {
             return response;
         }
@@ -123,7 +121,10 @@ const getContactByEmail = async (emailContact) => {
             if (contacts.length === 0) {
                 return "Contato não encontrado!";
             }
+            console.log("Contato: ",contacts[0]);
             const result = new ContactsResponse(contacts[0]);
+
+
             return result;
         }
         else {

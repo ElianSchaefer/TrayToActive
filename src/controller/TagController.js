@@ -1,15 +1,23 @@
-const { request } = require('http');
 const TagsService = require('../services/TagsService');
 
-exports.AddTag = (req, res) => {
+exports.AddTag = async(req, res) => {
     try {
-        const { Tag } = req.body;
+        const { contactTag } = req.body;
 
-        // res.send(ACService.CreateAccount(nome, accountUrl));
-        TagsService.AddTag(Tag);
+        const ret = await TagsService.AddTag(contactTag);
+        return res.status(res.statusCode).json({ message:  ret });
+    }
+    catch (error) {
+        return res.status(res.statusCode).send({ message: "Internal Server Error - " + error.message });
+    }
+}
 
-        console.log("retorno - " + res.body)
-        return res.status(res.statusCode).json({ message: "Tag Adicionada" + res.body });
+exports.RemoveTag = async (req, res) => {
+    try {
+        const { contactTagId } = req.body;
+
+        const ret = await TagsService.RemoveTag(contactTagId);
+        return res.status(res.statusCode).json({ message:  ret });
     }
     catch (error) {
         return res.status(res.statusCode).send({ message: "Internal Server Error - " + error.message });

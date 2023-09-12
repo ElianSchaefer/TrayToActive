@@ -4,23 +4,10 @@ class ContactsResponse {
             this.phone = contact.phone,
             this.firstName = contact.firstName,
             this.lastName = contact.lastName,
-            this.id = contact.id
+            this.idContato = contact.id
+            this.idTag = contact.contactTags.tag || '',
+            this.idContactTags = contact.contactTags.id||'' 
     }
-
-    // addField(customFieldId, fieldValue, accountId, fieldCurrency) {
-    //     const field = {
-    //         customFieldId: customFieldId,
-    //         fieldValue: fieldValue,
-    //         accountId: accountId
-    //     };
-    //     if (fieldCurrency) {
-    //         field.fieldCurrency = fieldCurrency;
-    //     }
-    //     this.account.fields.push(field);
-    // }
-
-    //addLinks() {}
-
 }
 
 
