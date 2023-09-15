@@ -1,10 +1,6 @@
-const ContactsResponseError = require('../entities/ContactResponseError');
-const ContactsResponse = require('../entities/ContactResponse');
-const Contact = require('../entities/Contact');
 const Object = require('../entities/Object');
 const request = require('request');
 const { response } = require('express');
-const Contacts = require('../entities/ContactResponse');
 
 
 //colocar nas configs? .env
@@ -90,7 +86,7 @@ const CreateContact = async (contact) => {
         }
         else {
             const { contact } = response.body
-            const result = new ContactsResponse(contact);
+            const result = contact;
             return result;
         }
     }
@@ -122,7 +118,7 @@ const getContactByEmail = async (emailContact) => {
                 return "Contato não encontrado!";
             }
             console.log("Contato: ",contacts[0]);
-            const result = new ContactsResponse(contacts[0]);
+            const result = contacts[0];
 
 
             return result;
@@ -160,7 +156,7 @@ const updateContact = async (contact) => {
         }
         else {
             const { contact } = response.body
-            const result = new ContactsResponse(contact);
+            const result = contact;
             return result;
         }
     }

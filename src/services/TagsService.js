@@ -9,7 +9,24 @@ const request = require('request');
 const BASE_URL = 'https://elian1692147924.api-us1.com/api/3';
 const COMMON_HEADERS = { 'Api-Token': '05688b886205fe84e315d0bb890e74b849410a7c435ee546145eca151f6e32a127bb3030' }
 
-async function makeRequestAsyncPost(options, data) {
+async function makeRequestAsyncGet(options) {
+
+    return new Promise((resolve, reject) => {
+        request.get(options, (err, res, body) => {
+            if (err) {
+                console.log('erro 01', url)
+                return reject(err);
+            }
+            resolve(body);
+
+            console.log(`Status: ${res.statusCode} ${res.statusMessage}`);
+            
+            console.log('Retorno: ', body);
+        });
+    });
+}
+
+async function makeRequestAsyncPost(options) {
 
     return new Promise((resolve, reject) => {
         request.post(options, (err, res, body) => {
@@ -23,7 +40,7 @@ async function makeRequestAsyncPost(options, data) {
     });
 }
 
-async function makeRequestAsyncDelete(options, data) {
+async function makeRequestAsyncDelete(options) {
 
     return new Promise((resolve, reject) => {
         request.delete(options, (err, res, body) => {
@@ -35,6 +52,32 @@ async function makeRequestAsyncDelete(options, data) {
             console.log(`Status: ${res.statusCode} ${res.statusMessage}`);
         });
     });
+}
+
+const GetTag = async () => {
+
+    const options = {
+        url: `${BASE_URL}/tags`,
+        json: true,
+        headers: COMMON_HEADERS
+    };
+    
+    try {
+        const response = await makeRequestAsyncGet(options);
+
+        //validar statusCode
+        if (response.statusCode !== 200) {
+            console.log('Não foi possovel listar as Tags: ', new ContactTagResponseError(response));
+            return response;
+        }
+        else {
+            console.log('Lista de Tags: ', new ContactTagResponse(response));
+            return response;
+        }
+    }
+    catch (error) {
+        console.error('Erro ao listar Tags: ', error);
+    }
 }
 
 const AddTag = async (contactTag) => {
@@ -63,7 +106,6 @@ const AddTag = async (contactTag) => {
     catch (error) {
         console.error('Erro ao criar contato: ', error);
     }
-
 }
 
 const RemoveTag = async (contactTagId) => {
@@ -92,6 +134,5 @@ const RemoveTag = async (contactTagId) => {
     catch (error) {
         console.error('Erro ao criar contato: ', error);
     }
-
 }
-module.exports = { AddTag, RemoveTag };
+module.exports = { GetTag, AddTag, RemoveTag };
