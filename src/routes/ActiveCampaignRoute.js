@@ -1,13 +1,19 @@
 const express = require('express');
+const app = express();
 const router = express.Router();
 const accountsController = require("../controller/AccountsController");
 const contactsController = require("../controller/ContactsController");
 const tagController = require("../controller/TagController");
 const listController = require("../controller/ListController");
+const authController = require("../controller/TrayAuthController");
+
+const path = require("path");
+
 
 router.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname + '/index.html'));
+    res.sendFile(path.normalize(__dirname+'/../views/index.html'));
 })
+
 
 //Contas
 router.post("/Accounts", accountsController.createAccount);
@@ -26,6 +32,15 @@ router.delete("/RemoveContactsTag", tagController.RemoveTag);
 router.get("/GetLists", listController.getLists);
 router.post("/ContactsToList", listController.AddToList);
 //router.delete("/RemoveContactsFromList", listController.RemoveFromList);
+
+
+//Tela de Autorização Tray
+
+router.get("/Auth", authController.getAuth);
+
+router.get('/Autorization', function (req, res) {
+    res.sendFile(path.normalize(__dirname+'/../views/aceite.html'));
+});
 
 
 module.exports = router;
